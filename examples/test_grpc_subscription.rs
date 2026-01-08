@@ -6,7 +6,7 @@ mod protos {
 }
 
 use protos::user_service_client::UserServiceClient;
-use protos::{SubscribeRequest, UserUpdate};
+use protos::SubscribeRequest;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

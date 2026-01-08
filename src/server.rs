@@ -7,6 +7,7 @@
 //! Author: imshike@gmail.com
 
 use crate::config::Config;
+use crate::handlers::grid::AppState;
 use crate::handlers::grpc_helloworld::GreeterService;
 use crate::handlers::grpc_user::UserServiceImpl;
 use crate::protos::helloworld::greeter_server::GreeterServer;
@@ -19,10 +20,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 // Import route modules
 use crate::routes;
-
-/// Application state
-pub type AppState = routes::rest::AppState;
-
 
 /// Start the server
 pub async fn start_server() -> Result<(), Box<dyn std::error::Error>> {

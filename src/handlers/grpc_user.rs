@@ -10,8 +10,8 @@ use crate::protos::user::{user_service_server::UserService, *};
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
 use std::time::Duration;
-use tokio_stream::wrappers::ReceiverStream;
 use tokio::sync::mpsc;
+use tokio_stream::wrappers::ReceiverStream;
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]
@@ -23,7 +23,10 @@ pub struct UserServiceImpl {
 impl UserService for UserServiceImpl {
     type SubscribeUserUpdatesStream = ReceiverStream<Result<UserUpdate, Status>>;
 
-    async fn get_user(&self, request: Request<GetUserRequest>) -> Result<Response<GetUserResponse>, Status> {
+    async fn get_user(
+        &self,
+        request: Request<GetUserRequest>,
+    ) -> Result<Response<GetUserResponse>, Status> {
         let user_id = request.into_inner().user_id;
 
         if user_id == 0 {
@@ -40,7 +43,10 @@ impl UserService for UserServiceImpl {
         }))
     }
 
-    async fn create_user(&self, request: Request<CreateUserRequest>) -> Result<Response<CreateUserResponse>, Status> {
+    async fn create_user(
+        &self,
+        request: Request<CreateUserRequest>,
+    ) -> Result<Response<CreateUserResponse>, Status> {
         let req = request.into_inner();
         let user_id = self.next_id.fetch_add(1, Ordering::SeqCst) as i32 + 1;
 
@@ -54,7 +60,10 @@ impl UserService for UserServiceImpl {
         }))
     }
 
-    async fn update_user(&self, request: Request<UpdateUserRequest>) -> Result<Response<UpdateUserResponse>, Status> {
+    async fn update_user(
+        &self,
+        request: Request<UpdateUserRequest>,
+    ) -> Result<Response<UpdateUserResponse>, Status> {
         let req = request.into_inner();
 
         if req.user_id == 0 {
@@ -71,7 +80,10 @@ impl UserService for UserServiceImpl {
         }))
     }
 
-    async fn delete_user(&self, request: Request<DeleteUserRequest>) -> Result<Response<DeleteUserResponse>, Status> {
+    async fn delete_user(
+        &self,
+        request: Request<DeleteUserRequest>,
+    ) -> Result<Response<DeleteUserResponse>, Status> {
         let user_id = request.into_inner().user_id;
 
         if user_id == 0 {
@@ -120,7 +132,7 @@ impl UserService for UserServiceImpl {
                         id: user_id,
                         name: format!("User {}", user_id),
                         email: format!("user{}@example.com", user_id),
-                        age: 30 + (counter % 10) as i32,
+                        age: 30 + (counter % 10),
                     }),
                     update_type: update_type.to_string(),
                     timestamp: timestamp as i64,

@@ -20,9 +20,17 @@ pub async fn get_user_info() -> Result<serde_json::Value, ErrorObjectOwned> {
 }
 
 /// Update user information
-pub async fn update_user_info(params: serde_json::Value) -> Result<serde_json::Value, ErrorObjectOwned> {
-    let name = params.get("name").and_then(|v: &serde_json::Value| v.as_str()).unwrap_or("");
-    let age = params.get("age").and_then(|v: &serde_json::Value| v.as_u64()).unwrap_or(0);
+pub async fn update_user_info(
+    params: serde_json::Value,
+) -> Result<serde_json::Value, ErrorObjectOwned> {
+    let name = params
+        .get("name")
+        .and_then(|v: &serde_json::Value| v.as_str())
+        .unwrap_or("");
+    let age = params
+        .get("age")
+        .and_then(|v: &serde_json::Value| v.as_u64())
+        .unwrap_or(0);
 
     Ok(json!({
         "success": true,
@@ -31,7 +39,9 @@ pub async fn update_user_info(params: serde_json::Value) -> Result<serde_json::V
 }
 
 /// Verify user credentials
-pub async fn verify_credentials(params: serde_json::Value) -> Result<serde_json::Value, ErrorObjectOwned> {
+pub async fn verify_credentials(
+    params: serde_json::Value,
+) -> Result<serde_json::Value, ErrorObjectOwned> {
     let username = params
         .get("username")
         .and_then(|v: &serde_json::Value| v.as_str())

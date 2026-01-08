@@ -1,4 +1,4 @@
-use jsonrpsee::core::client::ClientBuilder;
+use jsonrpsee::core::client::ClientT;
 use jsonrpsee::ws_client::WsClientBuilder;
 use serde_json::json;
 
@@ -9,7 +9,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Testing JSON-RPC methods...");
 
-    let result: serde_json::Value = client.request("get_user_info", json!([])).await?;
+    let result: serde_json::Value = client.request("get_user_info", ((),)).await?;
     println!("get_user_info result: {}", result);
 
     let params = json!({
@@ -17,14 +17,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "email": "test@example.com",
         "age": 25
     });
-    let result: serde_json::Value = client.request("update_user_info", json!([params])).await?;
+    let result: serde_json::Value = client.request("update_user_info", (params,)).await?;
     println!("update_user_info result: {}", result);
 
     let params = json!({
         "username": "testuser",
         "password": "testpass"
     });
-    let result: serde_json::Value = client.request("verify_credentials", json!([params])).await?;
+    let result: serde_json::Value = client.request("verify_credentials", (params,)).await?;
     println!("verify_credentials result: {}", result);
 
     println!("Test completed!");

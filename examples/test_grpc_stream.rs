@@ -1,6 +1,6 @@
+use omni_gate_rs::protos::user::user_service_client::UserServiceClient;
+use omni_gate_rs::protos::user::SubscribeRequest;
 use tonic::transport::Channel;
-use axum_gateway::protos::user::user_service_client::UserServiceClient;
-use axum_gateway::protos::user::SubscribeRequest;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

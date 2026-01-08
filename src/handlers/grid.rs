@@ -1,6 +1,6 @@
-//! Grid business logic module
+//! Grid REST business logic handler
 //!
-//! Contains business logic processing functions related to grid.
+//! Handles business logic for grid item CRUD operations.
 //!
 //! Copyright © 2025 imshike@gmail.com
 //! SPDX-License-Identifier: Apache-2.0
@@ -11,12 +11,49 @@ use axum::{
     http::StatusCode,
     response::Json,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use std::sync::{Arc, RwLock};
+use utoipa::ToSchema;
 
-use crate::routes::rest::{CreateGridItem, GridItem, GridItemResponse, UpdateGridItem};
-use crate::server::AppState;
+#[derive(Clone, Debug, ToSchema)]
+pub struct GridItem {
+    pub id: u64,
+    pub name: String,
+    pub description: String,
+    pub x: i32,
+    pub y: i32,
+}
 
-// Response structure
+#[derive(Serialize, ToSchema)]
+pub struct GridItemResponse {
+    pub id: u64,
+    pub name: String,
+    pub description: String,
+    pub x: i32,
+    pub y: i32,
+}
+
+#[derive(Deserialize, ToSchema)]
+pub struct CreateGridItem {
+    pub name: String,
+    pub description: String,
+    pub x: i32,
+    pub y: i32,
+}
+
+#[derive(Deserialize, ToSchema)]
+pub struct UpdateGridItem {
+    pub name: Option<String>,
+    pub description: Option<String>,
+    pub x: Option<i32>,
+    pub y: Option<i32>,
+}
+
+#[derive(Clone)]
+pub struct AppState {
+    pub grid_items: Arc<RwLock<Vec<GridItem>>>,
+}
+
 #[derive(Serialize)]
 pub struct ApiResponse<T> {
     pub success: bool,
@@ -24,8 +61,6 @@ pub struct ApiResponse<T> {
     pub message: String,
 }
 
-#[allow(dead_code)]
-/// 获取所有网格项
 pub async fn list(State(state): State<AppState>) -> Json<ApiResponse<Vec<GridItemResponse>>> {
     let items = state
         .grid_items
@@ -49,8 +84,6 @@ pub async fn list(State(state): State<AppState>) -> Json<ApiResponse<Vec<GridIte
     })
 }
 
-#[allow(dead_code)]
-/// 获取特定网格项
 pub async fn get_by_id(
     Path(id): Path<u64>,
     State(state): State<AppState>,
@@ -81,8 +114,6 @@ pub async fn get_by_id(
     }
 }
 
-#[allow(dead_code)]
-/// Create new grid item
 pub async fn create(
     State(state): State<AppState>,
     Json(payload): Json<CreateGridItem>,
@@ -117,13 +148,11 @@ pub async fn create(
         Json(ApiResponse {
             success: true,
             data: Some(response_item),
-            message: "Grid item created successfully".to_string(),
+            message: "Successfully created grid item".to_string(),
         }),
     )
 }
 
-#[allow(dead_code)]
-/// Update grid item
 pub async fn update(
     Path(id): Path<u64>,
     State(state): State<AppState>,
@@ -178,8 +207,6 @@ pub async fn update(
     }
 }
 
-#[allow(dead_code)]
-/// Delete grid item
 pub async fn delete_by_id(
     Path(id): Path<u64>,
     State(state): State<AppState>,
@@ -201,7 +228,7 @@ pub async fn delete_by_id(
         Json(ApiResponse {
             success: false,
             data: None,
-            message: "Grid item not found".to_string(),
+            message: "Specified grid item not found".to_string(),
         })
     }
 }

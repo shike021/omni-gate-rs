@@ -1,4 +1,4 @@
-//! Axum Gateway library
+//! OmniGate library
 //!
 //! Copyright © 2025 imshike@gmail.com
 //! SPDX-License-Identifier: Apache-2.0

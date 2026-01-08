@@ -4,6 +4,8 @@
 # REST API and JSON-RPC server address
 rest_host = "127.0.0.1"
 rest_port = 3000
+jsonrpc_host = "127.0.0.1"
+jsonrpc_port = 4000
 
 # gRPC server address
 grpc_host = "[::1]"

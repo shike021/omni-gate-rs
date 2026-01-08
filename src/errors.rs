@@ -1,6 +1,6 @@
-//! 统一错误处理模块
+//! Unified error handling module
 //!
-//! 包含统一的错误类型定义和错误响应格式。
+//! Contains unified error type definitions and error response formats.
 //!
 //! Copyright © 2025 imshike@gmail.com
 //! SPDX-License-Identifier: Apache-2.0
@@ -13,21 +13,21 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 统一错误响应结构
+/// Unified error response structure
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ErrorResponse {
     pub success: bool,
     pub error: ErrorInfo,
 }
 
-/// 错误信息结构
+/// Error information structure
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ErrorInfo {
     pub code: i32,
     pub message: String,
 }
 
-/// 统一错误码定义
+/// Unified error code definition
 #[derive(Debug, Clone)]
 pub enum ErrorCode {
     // 通用错误 1000-1999

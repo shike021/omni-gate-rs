@@ -5,15 +5,15 @@ services:
     build: .
     ports:
       - "3000:3000"
-      - "50051:50051"
+      - "4000:4000"
+      - "5000:5000"
     environment:
       - RUST_LOG=info
-      - REST_HOST=0.0.0.0
       - REST_PORT=3000
-      - GRPC_HOST=0.0.0.0
-      - GRPC_PORT=50051
+      - JSONRPC_PORT=4000
+      - GRPC_PORT=5000
     volumes:
-      - ./config.json:/app/config.json:ro
+      - ./config.toml:/app/config.toml:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s

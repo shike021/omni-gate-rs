@@ -1,4 +1,4 @@
-use jsonrpsee::core::client::{ClientBuilder, SubscriptionClient};
+use jsonrpsee::core::client::SubscriptionClientT;
 use jsonrpsee::ws_client::WsClientBuilder;
 use serde_json::json;
 
@@ -14,17 +14,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "interval_seconds": 2
     });
 
-    let mut sub = client.subscribe(
-        "subscribe_user_updates",
-        params,
-        "unsubscribe_user_updates",
-    ).await?;
+    let mut sub: jsonrpsee::core::client::Subscription<serde_json::Value> = client
+        .subscribe(
+            "subscribe_user_updates",
+            (params,),
+            "unsubscribe_user_updates",
+        )
+        .await?;
 
     println!("Receiving updates:");
     let mut count = 0;
     while let Some(update) = sub.next().await {
         count += 1;
-        println!("[{}] Update: {}", count, update);
+        match update {
+            Ok(val) => println!("[{}] Update: {}", count, val),
+            Err(e) => println!("[{}] Error: {}", count, e),
+        }
         if count >= 5 {
             println!("Received 5 updates, stopping...");
             break;

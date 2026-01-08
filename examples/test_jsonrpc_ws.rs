@@ -1,7 +1,7 @@
-use tokio_tungstenite::tungstenite::client::IntoClientRequest;
-use tokio_tungstenite::connect_async;
 use futures_util::stream::StreamExt;
 use futures_util::SinkExt;
+use tokio_tungstenite::connect_async;
+use tokio_tungstenite::tungstenite::client::IntoClientRequest;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -14,7 +14,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Subscribing to user updates...");
     let subscribe_msg = r#"{"jsonrpc":"2.0","method":"subscribe_user_updates","params":{"user_id":1,"interval_seconds":2},"id":1}"#;
-    write.send(tokio_tungstenite::tungstenite::Message::Text(subscribe_msg.into())).await?;
+    write
+        .send(tokio_tungstenite::tungstenite::Message::Text(
+            subscribe_msg.into(),
+        ))
+        .await?;
 
     println!("Receiving updates:");
     let mut count = 0;
